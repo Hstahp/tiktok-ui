@@ -4,8 +4,8 @@ function HeaderOnly({ children }) {
     return (
         <div>
             <Header />
-            <div class="container">
-                <div class="content">{children}</div>
+            <div className="container">
+                <div className="content">{children}</div>
             </div>
         </div>
     );
