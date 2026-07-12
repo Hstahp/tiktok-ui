@@ -4,6 +4,8 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
+
+import * as searchServices from '~/apiServices/searchServices';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '~/components/AccountItem';
 import { useDebounce } from '~/hooks';
@@ -26,16 +28,17 @@ function Search() {
             return;
         }
 
-        setLoading(true);
-        fetch(`https://jsonplaceholder.typicode.com/users?q=${encodeURIComponent(debounced)}&type=less`)
-            .then((res) => res.json())
-            .then((res) => {
-                setSearchResult(res);
-                setLoading(false);
-            })
-            .catch(() => {
-                setLoading(false);
-            });
+        const fetchApi = async () => {
+            setLoading(true);
+
+            const result = await searchServices.search(debounced);
+
+            setSearchResult(result);
+
+            setLoading(false);
+        };
+
+        fetchApi();
     }, [debounced]);
 
     const handleClear = () => {
